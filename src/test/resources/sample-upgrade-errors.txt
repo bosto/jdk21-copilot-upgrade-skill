@@ -1,0 +1,4 @@
+ERROR javax.validation.ConstraintViolationException found
+ERROR springfox.documentation.spi.DocumentationType not found
+ERROR com.amazonaws.services.sqs.AmazonSQSClientBuilder usage detected
+WARN WebSecurityConfigurerAdapter is deprecated

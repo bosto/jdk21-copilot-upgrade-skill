@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-echo "Scanning pom.xml for relevant dependencies"
-grep -R "spring" pom.xml || true
-grep -R "redis" pom.xml || true
-grep -R "mq" pom.xml || true
-grep -R "amazon" pom.xml || true
+echo "== Java / Maven settings =="
+grep -R "<java.version>" pom.xml . || true
+grep -R "maven-compiler-plugin" pom.xml . || true
+grep -R "spring-boot" pom.xml . || true
+grep -R "spring-cloud" pom.xml . || true
+
+echo
+echo "== Potentially relevant dependencies =="
+grep -R "springfox\|springdoc\|swagger\|com.ibm.mq\|redis\|lettuce\|jedis\|spring-data-redis\|aws-java-sdk\|software.amazon.awssdk\|spring-cloud-aws\|mysql\|postgresql\|mariadb" pom.xml . || true
+
+echo
+echo "== Surefire / Failsafe / JaCoCo / Docker hints =="
+grep -R "maven-surefire-plugin\|maven-failsafe-plugin\|jacoco-maven-plugin\|dockerfile\|jib-maven-plugin\|spring-boot-maven-plugin" pom.xml . || true

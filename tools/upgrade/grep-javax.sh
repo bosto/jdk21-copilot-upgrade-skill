@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-echo "Scanning source code for javax imports"
-grep -RIn "import javax." src || true
+echo "== javax import scan =="
+grep -RIn --include="*.java" --include="*.kt" "import javax\." src || true
+
+echo
+echo "== javax validation / servlet / persistence usage =="
+grep -RIn --include="*.java" --include="*.kt" "javax\.validation\|javax\.servlet\|javax\.persistence\|javax\.annotation" src || true

@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-echo "Java version:"
+echo "== Runtime versions =="
 java -version
-
-echo "Maven version:"
 mvn -version
+
+echo
+echo "== Environment sanity =="
+echo "JAVA_HOME=${JAVA_HOME:-unset}"
+echo "MAVEN_OPTS=${MAVEN_OPTS:-unset}"
