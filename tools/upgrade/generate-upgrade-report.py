@@ -3,63 +3,47 @@ from pathlib import Path
 import argparse
 
 def read_text(path: Path) -> str:
-    if not path.exists():
-        return ""
-    return path.read_text(encoding="utf-8", errors="ignore")
+    return path.read_text(encoding="utf-8", errors="ignore") if path.exists() else ""
 
-def count_hits(text: str, needle: str) -> int:
-    return text.count(needle)
+def count(text: str, *needles: str) -> int:
+    lower = text.lower()
+    return sum(lower.count(n.lower()) for n in needles)
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--dependency-report", required=True)
-    parser.add_argument("--javax-report", required=True)
-    parser.add_argument("--legacy-report", required=True)
-    parser.add_argument("--output", required=True)
-    args = parser.parse_args()
-
-    dep = read_text(Path(args.dependency_report))
-    javax = read_text(Path(args.javax_report))
-    legacy = read_text(Path(args.legacy_report))
-
-    sections = []
-    sections.append("# Upgrade Report")
-    sections.append("")
-    sections.append("## Executive Summary")
-    sections.append("- This report summarizes likely migration hotspots for a JDK 8 → JDK 21 upgrade.")
-    sections.append("- Treat this as an input to planning, not as a final approval artifact.")
-    sections.append("")
-    sections.append("## Signals Detected")
-    sections.append(f"- javax references: {count_hits(javax, 'javax')}")
-    sections.append(f"- springfox/swagger legacy references: {count_hits(legacy.lower(), 'springfox') + count_hits(legacy.lower(), 'swagger')}")
-    sections.append(f"- AWS SDK v1 references: {count_hits(legacy, 'com.amazonaws')}")
-    sections.append(f"- Spring Security legacy references: {count_hits(legacy, 'WebSecurityConfigurerAdapter')}")
-    sections.append(f"- IBM MQ references: {count_hits(dep.lower(), 'com.ibm.mq')}")
-    sections.append("")
-    sections.append("## Recommended Next Steps")
-    sections.append("1. Align Java runtime and build plugins with Java 21.")
-    sections.append("2. Align framework versions in a dedicated PR.")
-    sections.append("3. Replace obsolete Swagger and SDK integrations.")
-    sections.append("4. Migrate `javax` imports to `jakarta` where required.")
-    sections.append("5. Validate middleware startup and rollout safety.")
-    sections.append("")
-    sections.append("## Raw Inputs")
-    sections.append("### Dependency Scan")
-    sections.append("```text")
-    sections.append(dep[:4000])
-    sections.append("```")
-    sections.append("")
-    sections.append("### javax Scan")
-    sections.append("```text")
-    sections.append(javax[:4000])
-    sections.append("```")
-    sections.append("")
-    sections.append("### Legacy API Scan")
-    sections.append("```text")
-    sections.append(legacy[:4000])
-    sections.append("```")
-
-    Path(args.output).write_text("\n".join(sections), encoding="utf-8")
+    p = argparse.ArgumentParser()
+    p.add_argument("--dependency-report", required=True)
+    p.add_argument("--javax-report", required=True)
+    p.add_argument("--legacy-report", required=True)
+    p.add_argument("--middleware-report", required=True)
+    p.add_argument("--output", required=True)
+    a = p.parse_args()
+    dep = read_text(Path(a.dependency_report))
+    javax = read_text(Path(a.javax_report))
+    legacy = read_text(Path(a.legacy_report))
+    middleware = read_text(Path(a.middleware_report))
+    lines = [
+        "# Upgrade Report", "",
+        "## Executive Summary",
+        "- This report highlights likely hotspots in a JDK 8 → JDK 21 migration.",
+        "- Use it to size work, slice PRs, and prepare validation/rollback.", "",
+        "## Key Signals",
+        f"- javax references: {count(javax, 'javax.')}",
+        f"- Springfox / Swagger legacy references: {count(legacy, 'springfox', 'swagger')}",
+        f"- AWS SDK v1 references: {count(legacy, 'com.amazonaws') + count(middleware, 'amazonsqs')}",
+        f"- Spring Security legacy references: {count(legacy, 'WebSecurityConfigurerAdapter')}",
+        f"- IBM MQ references: {count(middleware, 'com.ibm.mq', 'mqqueueconnectionfactory')}",
+        f"- Redis references: {count(middleware, 'redistemplate', 'lettuce', 'jedis')}",
+        f"- RDS/JDBC references: {count(middleware, 'datasource', 'hikari', 'postgresql', 'mysql', 'mariadb')}",
+        f"- SQS references: {count(middleware, 'sqsclient', 'amazonsqs', 'queuemessagingtemplate', 'sqstemplate')}",
+        "",
+        "## Suggested PR Slices",
+        "1. Build tooling and Java runtime baseline",
+        "2. Spring family alignment and obsolete library replacement",
+        "3. Middleware and SDK upgrade changes",
+        "4. Source-level refactors and startup fixes",
+        "5. Canary, smoke tests, rollback preparation",
+    ]
+    Path(a.output).write_text("\n".join(lines), encoding="utf-8")
     return 0
 
 if __name__ == "__main__":

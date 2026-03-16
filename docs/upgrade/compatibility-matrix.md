@@ -1,15 +1,13 @@
 # Compatibility Matrix
 
-Fill in the **Current** column from your real project before using this as a sign-off artifact.
-
-| Area | Current | Target | Notes |
+| Area | Current | Candidate Target | Validation Focus |
 |---|---|---|---|
-| Java | 8 | 21 | Runtime and compiler upgrade |
-| Spring Boot | TBD | 3.x supported line | Validate exact alignment with your platform |
-| Spring Cloud | TBD | matching supported line | Must align with chosen Boot line |
-| Swagger | TBD | supported OpenAPI approach | Replace obsolete integrations |
-| IBM MQ Client | TBD | supported client line | Validate TLS / cipher / messaging package assumptions |
-| Redis | TBD | supported Spring Data Redis line | Validate serializers and connection config |
-| RDS Driver | TBD | supported driver line | Validate datasource, pool, SSL, timezone |
-| SQS SDK | TBD | supported SDK line | Prefer consistent SDK usage across modules |
-| Build Plugins | TBD | Java 21-compatible line | surefire, failsafe, jacoco, container build |
+| Java runtime | 8 | 21 | Runtime, CI, Docker, Jenkins |
+| Maven plugins | TBD | Java 21-capable | compile, test, code coverage |
+| Spring Boot | TBD | supported 3.x line | startup and actuator |
+| Spring Cloud | TBD | matching supported line | bootstrap/config/client behavior |
+| Swagger/OpenAPI | TBD | supported OpenAPI path | docs endpoint and config |
+| IBM MQ | TBD | supported client line | TLS, cipher, JMS package, listener init |
+| Redis | TBD | supported starter/client | serializer, timeout, cluster/sentinel settings |
+| RDS driver | TBD | supported driver line | pool, SSL, timezone, startup migration path |
+| SQS | TBD | supported SDK line | client init, listener/send/receive path |

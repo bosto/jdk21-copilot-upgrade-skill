@@ -10,39 +10,26 @@ REPLACEMENTS = {
     "import javax.jms.": "import jakarta.jms.",
 }
 
-def process_file(path: Path, apply: bool) -> tuple[bool, str]:
-    original = path.read_text(encoding="utf-8", errors="ignore")
-    updated = original
-    changed = False
-    for old, new in REPLACEMENTS.items():
-        if old in updated:
-            updated = updated.replace(old, new)
-            changed = True
-    if changed and apply:
-        path.write_text(updated, encoding="utf-8")
-    return changed, str(path)
-
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--root", required=True)
-    parser.add_argument("--apply", action="store_true")
-    args = parser.parse_args()
-
-    root = Path(args.root)
-    if not root.exists():
-        print(f"root not found: {root}")
-        return 1
-
-    changed_files = []
+    p = argparse.ArgumentParser()
+    p.add_argument("--root", required=True)
+    p.add_argument("--apply", action="store_true")
+    a = p.parse_args()
+    root = Path(a.root)
+    changed = []
     for path in root.rglob("*.java"):
-        changed, file_name = process_file(path, args.apply)
-        if changed:
-            changed_files.append(file_name)
-
-    print("Rewrite mode:", "apply" if args.apply else "preview")
-    print("Changed files:", len(changed_files))
-    for f in changed_files:
-        print(f)
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        new = text
+        for old, rep in REPLACEMENTS.items():
+            new = new.replace(old, rep)
+        if new != text:
+            changed.append(str(path))
+            if a.apply:
+                path.write_text(new, encoding="utf-8")
+    print("mode:", "apply" if a.apply else "preview")
+    print("changed_files:", len(changed))
+    for c in changed:
+        print(c)
     return 0
 
 if __name__ == "__main__":
