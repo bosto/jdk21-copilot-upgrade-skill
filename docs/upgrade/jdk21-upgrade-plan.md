@@ -1,30 +1,38 @@
-# JDK 8 to JDK 21 Upgrade Plan
+# JDK 8 → JDK 21 Upgrade Plan
 
 ## Objective
-Migrate the service from JDK 8 to JDK 21 and align the app stack with a supported Spring Boot 3.x line.
+Upgrade the service runtime, framework stack, middleware libraries, and build pipeline to a Java 21-compatible state.
 
-## Scope
-- JDK runtime
-- Spring Boot / Spring Cloud
-- Swagger/OpenAPI
-- IBM MQ
-- Redis
-- RDS driver + datasource validation
-- SQS integration
-- build plugins
-- CI/CD runtime images
-- startup and integration validation
+## Suggested phases
 
-## Suggested PR sequence
-1. Build + version alignment
-2. javax/jakarta and framework code changes
-3. middleware integration updates
-4. validation, canary, rollback prep
+### Phase 1 - Baseline and assessment
+- inventory frameworks and middleware
+- export dependency tree
+- inspect CI, Docker, and runtime image Java version
+- scan for `javax`, legacy Swagger, legacy AWS SDK, and internal JDK APIs
 
-## Risks
-- javax to jakarta package migration
-- Spring Cloud / Boot mismatch
-- Swagger library replacement
-- AWS SDK v1 to v2 migration
-- IBM MQ TLS/FIPS/cipher config behavior changes
-- CI runtime not actually using Java 21
+### Phase 2 - Build and framework alignment
+- update Java version
+- update Maven compiler / surefire / failsafe / jacoco
+- align Spring Boot / Spring Cloud family
+- remove obviously obsolete libraries
+
+### Phase 3 - Source changes
+- `javax` → `jakarta`
+- validation, servlet, persistence, annotation package updates
+- security configuration updates
+- Swagger / OpenAPI config updates
+- SDK / middleware API updates
+
+### Phase 4 - Integration validation
+- DB connectivity
+- Redis serialization and health
+- MQ initialization and messaging path
+- SQS client init / send / receive path
+- actuator / health / smoke tests
+
+### Phase 5 - Rollout
+- canary release
+- log / metric watch window
+- rollback triggers
+- post-release regression checklist

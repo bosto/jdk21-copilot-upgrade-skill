@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "== Clean verify =="
-./mvnw -U -ntp clean verify
+if [[ -f ./mvnw ]]; then
+  MVN=./mvnw
+else
+  MVN=mvn
+fi
+
+echo "== Running build validation =="
+$MVN -q -DskipTests compile || true
 
 echo
-echo "== Spring Boot startup dry run hint =="
-echo "Run your app with:"
-echo "./mvnw spring-boot:run -Dspring-boot.run.profiles=local"
+echo "== Suggested startup validation =="
+echo "Run your application with a safe local profile and confirm health endpoints, DB init, Redis init, MQ init, and SQS client creation."

@@ -1,10 +1,8 @@
-# jdk21-copilot-upgrade-skill-repo
+# JDK 21 Upgrade Copilot Skills
 
-A production-oriented GitHub Copilot "skill-like" repository template for migrating a Java service from **JDK 8 to JDK 21** while upgrading related framework and middleware dependencies.
+A full repository template for running a **JDK 8 → JDK 21** application upgrade with **GitHub Copilot-style skills**, repo instructions, prompt files, repeatable scripts, and CI checks.
 
-## Target scenario
-
-This template is designed for services using some or all of:
+This template is designed for Java services that may use:
 
 - Spring Boot
 - Spring Cloud
@@ -14,82 +12,98 @@ This template is designed for services using some or all of:
 - RDS
 - SQS
 
-It helps Copilot behave more like a repeatable upgrade assistant by combining:
+## What this repo gives you
 
-- repo instructions
-- prompt files
-- one-command scripts
-- structured documents
+- A **skill-like structure** for Copilot and other coding agents
+- Upgrade prompts for assess / implement / code-fix / validate
+- Dependency and code scanners
+- `javax` → `jakarta` rewrite starter
+- CI checks for upgrade drift
+- Upgrade planning docs
+- A sample Maven module to test the workflow
 
-## Repository layout
+## Directory structure
 
 ```text
 .github/
   copilot-instructions.md
   prompts/
+  workflows/
+
+skills/
+  jdk21-assess/
+  jdk21-implement/
+  jdk21-code-fix/
+  jdk21-validate/
+
 tools/
   upgrade/
+  rewrite/
+
 docs/
   upgrade/
+
 scripts/
+sample-project/
 Makefile
 pom.xml
 ```
 
-## Recommended target line
+## Quick start
 
-- Java 21
-- Spring Boot 3.4.x
-- Spring Cloud 2024.0.x
-- Spring Cloud AWS 3.3.x
-- springdoc-openapi 2.8.x
-- AWS SDK v2 for SQS
-- IBM MQ 9.4.x client line
+### 1. Assess
+```bash
+make skill-jdk21-assess
+```
 
-## How to use with Copilot
+### 2. Implement plan
+```bash
+make skill-jdk21-implement
+```
 
-Ask Copilot with one of these instructions:
+### 3. Validate environment
+```bash
+make skill-jdk21-validate
+```
+
+### 4. Run CI-style checks locally
+```bash
+make ci-check
+```
+
+## Suggested Copilot prompts
 
 ### Assess
 ```text
 Use skill:jdk21-assess.
-Assess this repo for migration from JDK 8 to JDK 21.
+Analyze this repository for migrating from JDK 8 to JDK 21.
 Focus on Spring Boot, Spring Cloud, Swagger, IBM MQ, Redis, RDS, and SQS.
-Produce target versions, dependency changes, code hotspots, and risks.
+Return dependency changes, code hotspots, risks, and migration phases.
 ```
 
 ### Implement
 ```text
 Use skill:jdk21-implement.
-Generate a production-usable migration template for Java 21 and Spring Boot 3.4.
-Replace old Swagger integration with springdoc.
-Recommend AWS SDK v2 for SQS.
-Highlight IBM MQ migration risks.
+Generate concrete pom.xml, configuration, and refactor steps for migrating this service to Java 21.
+Prefer supported starters and remove obsolete libraries.
 ```
 
-### Fix build/runtime errors
+### Code fix
 ```text
 Use skill:jdk21-code-fix.
-The project fails after migration.
-Classify the error into javax/jakarta, Spring Boot 3 API change, Swagger mismatch, AWS SDK migration, or IBM MQ config mismatch.
-Provide minimal fix and clean refactor.
+Classify the current error into javax/jakarta migration, Spring Boot 3 API change, Swagger mismatch, AWS SDK mismatch, IBM MQ mismatch, or Java 21 incompatibility.
+Provide a minimal fix and a cleaner long-term refactor.
 ```
 
 ### Validate
 ```text
 Use skill:jdk21-validate.
-Generate build validation, startup validation, middleware validation, and rollout checklist for the JDK 21 migration.
-```
-
-## Local commands
-
-```bash
-make skill-jdk21-assess
-make skill-jdk21-validate
+Create a rollout-ready validation plan, including build checks, startup checks, integration checks, and rollback triggers.
 ```
 
 ## Notes
 
-- This repo includes a sample `pom.xml` and upgrade docs to use as scaffolding.
-- You should still adapt exact versions to your estate and internal platform constraints.
-- IBM MQ TLS/FIPS/cipher compatibility should be validated explicitly when moving to Java 21.
+This repo is intentionally **tool-agnostic**:
+- GitHub Copilot can use repo instructions and prompt files
+- Claude Code can use the `skills/` folders as a discoverable catalog
+- Cursor or other agents can use the same commands and docs

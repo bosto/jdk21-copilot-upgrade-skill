@@ -1,40 +1,35 @@
 # JDK 21 Upgrade Checklist
 
-## Phase 1 - Baseline
-- [ ] capture current branch and release tag
-- [ ] export dependency tree
-- [ ] identify current Spring Boot / Spring Cloud versions
-- [ ] identify all middleware integrations
-- [ ] identify Docker/Jenkins/build image Java version
+## Baseline
+- [ ] current Java version captured
+- [ ] current framework versions captured
+- [ ] dependency tree exported
+- [ ] Docker / CI runtime Java version verified
+- [ ] release and rollback points identified
 
-## Phase 2 - Version Alignment
-- [ ] upgrade parent pom to Spring Boot 3.4.x
-- [ ] align Spring Cloud to 2024.0.x
-- [ ] align Spring Cloud AWS to 3.3.x if used
-- [ ] replace springfox with springdoc-openapi
-- [ ] move AWS SDK usages toward v2 where applicable
-- [ ] verify IBM MQ client line and config assumptions
+## Framework alignment
+- [ ] build plugins compatible with Java 21
+- [ ] Spring family aligned
+- [ ] obsolete Swagger libraries removed
+- [ ] queue / DB / cache libraries reviewed
 
-## Phase 3 - Code Migration
-- [ ] javax -> jakarta changes
-- [ ] Spring Security migration if legacy style exists
-- [ ] validation annotations package changes
-- [ ] servlet / filter / interceptor package changes
-- [ ] remove deprecated APIs
-- [ ] fix reflection / encapsulation issues
+## Code migration
+- [ ] `javax` usage reviewed
+- [ ] internal JDK API usage reviewed
+- [ ] Spring Security config reviewed
+- [ ] startup configuration updated
 
-## Phase 4 - Validation
-- [ ] clean build
-- [ ] unit tests
-- [ ] integration tests
-- [ ] startup test
-- [ ] Redis validation
-- [ ] RDS connectivity validation
-- [ ] MQ connectivity validation
-- [ ] SQS client validation
+## Validation
+- [ ] build passes
+- [ ] startup passes
+- [ ] DB init passes
+- [ ] Redis init passes
+- [ ] MQ init passes
+- [ ] SQS init passes
+- [ ] smoke tests pass
 
-## Phase 5 - Rollout
-- [ ] canary
-- [ ] rollback trigger defined
-- [ ] metrics and logs dashboard ready
-- [ ] post-release smoke tests ready
+## Rollout
+- [ ] canary plan written
+- [ ] rollback triggers written
+- [ ] dashboards ready
+- [ ] on-call handoff ready
