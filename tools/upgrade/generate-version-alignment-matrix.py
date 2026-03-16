@@ -17,7 +17,6 @@ CONTENT = """# Version Alignment Matrix
 | RDS driver | TBD | supported driver line | Validate pool and SSL/timezone |
 | SQS SDK | TBD | supported SDK line | Avoid mixed SDK styles |
 """
-
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--output", required=True)
@@ -25,6 +24,5 @@ def main() -> int:
     Path(a.output).parent.mkdir(parents=True, exist_ok=True)
     Path(a.output).write_text(CONTENT, encoding="utf-8")
     return 0
-
 if __name__ == "__main__":
     raise SystemExit(main())

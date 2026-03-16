@@ -5,4 +5,4 @@ $MVN -q -DskipTests compile || true
 echo
 $MVN -q test || true
 echo
-echo "Validate health checks, DB init, Redis init, MQ init, and SQS client/listener startup."
+echo "Validate actuator, DB, Redis, MQ, SQS startup paths in a sandbox profile."

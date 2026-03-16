@@ -1,0 +1,13 @@
+checks:
+  db:
+    enabled: true
+    validateConnection: true
+  redis:
+    enabled: true
+    validateSerializer: true
+  mq:
+    enabled: true
+    validateTlsCipher: true
+  sqs:
+    enabled: true
+    validateClientInit: true

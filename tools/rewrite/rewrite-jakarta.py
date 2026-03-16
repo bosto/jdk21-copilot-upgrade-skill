@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import argparse
-
 REPLACEMENTS = {
     "import javax.validation.": "import jakarta.validation.",
     "import javax.servlet.": "import jakarta.servlet.",
@@ -9,7 +8,6 @@ REPLACEMENTS = {
     "import javax.annotation.": "import jakarta.annotation.",
     "import javax.jms.": "import jakarta.jms.",
 }
-
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--root", required=True)
@@ -31,6 +29,5 @@ def main() -> int:
     for c in changed:
         print(c)
     return 0
-
 if __name__ == "__main__":
     raise SystemExit(main())

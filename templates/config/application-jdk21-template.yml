@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: enterprise-service
+  datasource:
+    url: jdbc:postgresql://db-host:5432/app
+    username: app
+    password: change-me
+  data:
+    redis:
+      host: redis-host
+      port: 6379
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+aws:
+  region: ap-southeast-1
+  sqs:
+    queue-name: sample-queue
+
+mq:
+  tls: true
+  cipher: TLS_RSA_WITH_AES_256_CBC_SHA256

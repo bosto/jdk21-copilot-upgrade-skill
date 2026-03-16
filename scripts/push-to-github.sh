@@ -7,7 +7,7 @@ fi
 repo_url="$1"
 git init
 git add .
-git commit -m "Add enhanced JDK 21 upgrade Copilot skills template"
+git commit -m "Add enterprise JDK 21 upgrade Copilot skills template"
 git branch -M main
 git remote add origin "$repo_url"
 git push -u origin main

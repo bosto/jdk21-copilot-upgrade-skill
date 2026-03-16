@@ -1,4 +1,4 @@
-.PHONY: help skill-jdk21-assess skill-jdk21-implement skill-jdk21-code-fix skill-jdk21-validate skill-spring-boot-cloud-align skill-middleware-compatibility-review ci-check rewrite-jakarta rewrite-jakarta-preview sample-scan generate-pr-comment
+.PHONY: help skill-jdk21-assess skill-jdk21-implement skill-jdk21-code-fix skill-jdk21-validate skill-spring-boot-cloud-align skill-middleware-compatibility-review ci-check rewrite-jakarta rewrite-jakarta-preview sample-scan generate-pr-comment middleware-smoke-template
 
 help:
 	@echo "Available targets:"
@@ -11,6 +11,7 @@ help:
 	@echo "  make rewrite-jakarta-preview"
 	@echo "  make rewrite-jakarta"
 	@echo "  make ci-check"
+	@echo "  make middleware-smoke-template"
 	@echo "  make generate-pr-comment"
 
 skill-jdk21-assess:
@@ -19,20 +20,23 @@ skill-jdk21-assess:
 	bash tools/upgrade/grep-javax.sh . | tee .upgrade-output/javax-scan.txt
 	bash tools/upgrade/grep-legacy-apis.sh . | tee .upgrade-output/legacy-api-scan.txt
 	bash tools/upgrade/scan-middleware.sh . | tee .upgrade-output/middleware-scan.txt
+	bash tools/upgrade/check-docker-jenkins-runtime.sh . | tee .upgrade-output/runtime-hints.txt
 	python3 tools/upgrade/generate-upgrade-report.py \
 	  --dependency-report .upgrade-output/dependency-scan.txt \
 	  --javax-report .upgrade-output/javax-scan.txt \
 	  --legacy-report .upgrade-output/legacy-api-scan.txt \
 	  --middleware-report .upgrade-output/middleware-scan.txt \
+	  --runtime-report .upgrade-output/runtime-hints.txt \
 	  --output .upgrade-output/upgrade-report.md
 	@echo "Generated .upgrade-output/upgrade-report.md"
 
 skill-jdk21-implement:
-	@echo "Review docs/upgrade/jdk21-upgrade-plan.md"
-	@echo "Review docs/upgrade/pr-slicing-plan.md"
-	@echo "Review docs/upgrade/compatibility-matrix.md"
-	@echo "Review docs/upgrade/code-change-catalog.md"
-	@echo "Review docs/upgrade/openrewrite-recipes.md"
+	@echo "Review enterprise templates and docs:"
+	@echo "  docs/upgrade/enterprise-runbook.md"
+	@echo "  docs/upgrade/risk-register.md"
+	@echo "  templates/maven/enterprise-service-pom.xml"
+	@echo "  templates/config/application-jdk21-template.yml"
+	@echo "  templates/maven/openrewrite-pom-snippet.xml"
 
 skill-jdk21-code-fix:
 	@echo "Use .github/prompts/jdk21-upgrade-code-fix.prompt.md with Copilot"
@@ -42,6 +46,7 @@ skill-jdk21-validate:
 	bash tools/upgrade/verify-runtime.sh
 	bash tools/upgrade/run-upgrade-checks.sh
 	bash tools/upgrade/check-docker-jenkins-runtime.sh .
+	bash tools/upgrade/middleware-smoke-template.sh
 
 skill-spring-boot-cloud-align:
 	mkdir -p .upgrade-output
@@ -68,6 +73,9 @@ generate-pr-comment:
 
 ci-check:
 	bash tools/upgrade/ci-upgrade-check.sh
+
+middleware-smoke-template:
+	bash tools/upgrade/middleware-smoke-template.sh
 
 sample-scan:
 	cd sample-project && ../tools/upgrade/scan-dependencies.sh .
