@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: sample-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/app
+  data:
+    redis:
+      host: localhost
+
+mq:
+  tls: true
+  cipher: TLS_RSA_WITH_AES_256_CBC_SHA256
+
+aws:
+  sqs:
+    queue-name: demo-queue

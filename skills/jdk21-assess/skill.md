@@ -1,2 +1,2 @@
 # skill:jdk21-assess
-Assess full enterprise migration scope and output phased risks.
+Assess the customized migration scope for Boot/Cloud + MQ + Redis + RDS + SQS.

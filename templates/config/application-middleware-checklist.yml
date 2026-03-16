@@ -2,12 +2,16 @@ checks:
   db:
     enabled: true
     validateConnection: true
+    validateSimpleQuery: true
   redis:
     enabled: true
     validateSerializer: true
+    validateReadWrite: true
   mq:
     enabled: true
     validateTlsCipher: true
+    validateConnectionFactory: true
   sqs:
     enabled: true
     validateClientInit: true
+    validateSendReceive: true

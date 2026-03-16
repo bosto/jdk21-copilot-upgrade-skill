@@ -1,11 +1,13 @@
-# pom Before / After Example
+# Before / After Mapping
 
 ## Before
 - Java 8
 - Spring Boot 2.x
+- Spring Cloud old line
 - Springfox
 - aws-java-sdk-sqs
-- old MQ client line
+- older MQ client
+- javax imports
 
 ## After
 - Java 21
@@ -14,3 +16,4 @@
 - springdoc-openapi
 - AWS SDK v2
 - reviewed MQ client line
+- jakarta imports

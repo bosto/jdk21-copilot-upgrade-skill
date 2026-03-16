@@ -1,2 +1,2 @@
 # skill:jdk21-validate
-Validate build, startup, middleware smoke checks, canary, and rollback readiness.
+Validate customized rollout readiness with middleware smoke checks.

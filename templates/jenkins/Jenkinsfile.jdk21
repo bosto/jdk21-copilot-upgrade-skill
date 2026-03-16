@@ -1,0 +1,20 @@
+pipeline {
+  agent any
+  tools {
+    jdk 'jdk21'
+    maven 'maven3'
+  }
+  stages {
+    stage('Verify Runtime') {
+      steps {
+        sh 'java -version'
+        sh 'mvn -version'
+      }
+    }
+    stage('Assessment') {
+      steps {
+        sh 'make skill-jdk21-assess'
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-name: jdk21-upgrade-enterprise-check
+name: jdk21-upgrade-customized-check
 on:
   pull_request:
 jobs:
@@ -14,7 +14,3 @@ jobs:
         with:
           python-version: '3.11'
       - run: make skill-jdk21-assess
-      - uses: actions/upload-artifact@v4
-        with:
-          name: upgrade-output
-          path: .upgrade-output/

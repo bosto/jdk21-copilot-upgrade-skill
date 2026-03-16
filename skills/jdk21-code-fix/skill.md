@@ -1,2 +1,2 @@
 # skill:jdk21-code-fix
-Fix build/startup issues caused by Java 21 and framework changes.
+Classify and fix build/runtime issues during the customized migration.

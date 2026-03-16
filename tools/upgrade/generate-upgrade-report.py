@@ -18,31 +18,35 @@ def main() -> int:
     p.add_argument("--runtime-report", required=True)
     p.add_argument("--output", required=True)
     a = p.parse_args()
+
     dep = read_text(Path(a.dependency_report))
     javax = read_text(Path(a.javax_report))
     legacy = read_text(Path(a.legacy_report))
     middleware = read_text(Path(a.middleware_report))
     runtime = read_text(Path(a.runtime_report))
+
     lines = [
-        "# Upgrade Report", "",
+        "# Upgrade Report",
+        "",
         "## Executive Summary",
-        "- This report highlights likely hotspots in an enterprise JDK 8 → JDK 21 migration.",
-        "- Use it for PR slicing, risk review, rollout planning, and rollback preparation.", "",
+        "- This customized report is tuned for Boot/Cloud + MQ + Redis + RDS + SQS migration work.",
+        "",
         "## Key Signals",
         f"- javax references: {count(javax, 'javax.')}",
-        f"- Springfox / Swagger legacy references: {count(legacy, 'springfox', 'swagger')}",
+        f"- Swagger / Springfox legacy references: {count(legacy, 'springfox', 'swagger')}",
         f"- AWS SDK v1 references: {count(legacy, 'com.amazonaws') + count(middleware, 'amazonsqs')}",
         f"- IBM MQ references: {count(middleware, 'com.ibm.mq', 'mqqueueconnectionfactory')}",
         f"- Redis references: {count(middleware, 'redistemplate', 'lettuce', 'jedis')}",
-        f"- RDS/JDBC references: {count(middleware, 'datasource', 'hikari', 'postgresql', 'mysql', 'mariadb')}",
+        f"- RDS / JDBC references: {count(middleware, 'datasource', 'hikari', 'postgresql', 'mysql', 'mariadb')}",
         f"- SQS references: {count(middleware, 'sqsclient', 'amazonsqs', 'queuemessagingtemplate', 'sqstemplate')}",
         "",
-        "## Suggested PR Slices",
-        "1. Build tooling + Java 21 baseline",
-        "2. Spring family alignment + obsolete library replacement",
-        "3. Middleware / SDK changes",
-        "4. Source refactors and startup fixes",
-        "5. Canary / rollback preparation",
+        "## Recommended PR Order",
+        "1. Java 21 + plugin + pipeline runtime",
+        "2. Spring Boot / Cloud alignment",
+        "3. Swagger → Springdoc and SDK cleanup",
+        "4. MQ / Redis / RDS / SQS config and startup fixes",
+        "5. javax → jakarta and remaining source refactors",
+        "6. Validation, canary, rollback",
         "",
         "## Runtime Hints",
         "```text",

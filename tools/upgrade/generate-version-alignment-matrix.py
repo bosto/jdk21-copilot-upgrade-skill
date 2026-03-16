@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import argparse
-
 CONTENT = """# Version Alignment Matrix
 
 | Area | Current | Candidate Target | Notes |
@@ -11,11 +10,11 @@ CONTENT = """# Version Alignment Matrix
 | Surefire / Failsafe | TBD | Java 21-capable | Validate tests in CI |
 | Spring Boot | TBD | supported 3.x line | Must match chosen Cloud line |
 | Spring Cloud | TBD | matching supported line | Avoid cross-family mismatch |
-| Swagger/OpenAPI | TBD | supported OpenAPI approach | Remove legacy Swagger integration |
-| IBM MQ | TBD | supported client line | Validate JMS package and TLS assumptions |
+| Springdoc/OpenAPI | TBD | supported line | Replace Springfox |
+| IBM MQ | TBD | reviewed client line | Validate TLS / cipher / JMS package |
 | Redis | TBD | supported starter/client | Validate serializers and timeouts |
-| RDS driver | TBD | supported driver line | Validate pool and SSL/timezone |
-| SQS SDK | TBD | supported SDK line | Avoid mixed SDK styles |
+| RDS driver | TBD | supported driver line | Validate pool, SSL, timezone |
+| SQS SDK | TBD | AWS SDK v2 | Avoid mixed SDK styles |
 """
 def main() -> int:
     p = argparse.ArgumentParser()

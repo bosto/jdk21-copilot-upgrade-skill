@@ -8,10 +8,15 @@ def main() -> int:
     a = p.parse_args()
     report = Path(a.report).read_text(encoding="utf-8", errors="ignore")
     body = "\\n".join([
-        "## JDK 21 Upgrade Assessment", "",
+        "## JDK 21 Upgrade Assessment",
+        "",
         "- Review attached artifacts",
-        "- Check javax, legacy API, middleware, and runtime findings", "",
-        "### Excerpt", "```text", report[:2500], "```"
+        "- Focus on Boot/Cloud alignment, Swagger replacement, and middleware startup risk",
+        "",
+        "### Excerpt",
+        "```text",
+        report[:2500],
+        "```"
     ])
     Path(a.output).write_text(body, encoding="utf-8")
     return 0

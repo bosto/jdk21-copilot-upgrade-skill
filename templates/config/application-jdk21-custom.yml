@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: customized-service
+  datasource:
+    url: jdbc:postgresql://db-host:5432/app
+    username: app
+    password: change-me
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+  data:
+    redis:
+      host: redis-host
+      port: 6379
+      timeout: 3s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+app:
+  mq:
+    queue-manager: QM1
+    channel: DEV.APP.SVRCONN
+    conn-name: mq-host(1414)
+    user: app
+    password: change-me
+    tls-enabled: true
+    cipher-suite: TLS_RSA_WITH_AES_256_CBC_SHA256
+  aws:
+    region: ap-southeast-1
+    sqs-queue-url: https://sqs.ap-southeast-1.amazonaws.com/123456789012/demo-queue
